@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GuessState : MonoBehaviour
+public class GuessState : CardBaseState
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void ButtonEvent(CardStateManager cardStateManager)
     {
-        
+        throw new System.NotImplementedException();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void EnterState(CardStateManager cardStateManager)
     {
-        
+        Debug.Log(cardStateManager.cardCurrentState);
+        cardStateManager.AddVerifyStateEvent();
     }
 }

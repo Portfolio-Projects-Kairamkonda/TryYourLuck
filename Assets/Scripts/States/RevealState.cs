@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class RevealState : CardBaseState
 {
-    public override void EnterState(CardStateManager cardStateManager)
+    public override void ButtonEvent(CardStateManager cardStateManager)
     {
         throw new System.NotImplementedException();
     }
+
+    public override void EnterState(CardStateManager cardStateManager)
+    {
+        Debug.Log(cardStateManager.cardCurrentState);
+
+        cardStateManager.RevealCards();
+        cardStateManager.SwitchState(cardStateManager.pickState);
+    }
+
+
 }

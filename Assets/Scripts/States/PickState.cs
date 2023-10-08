@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickState : MonoBehaviour
+public class PickState : CardBaseState
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void ButtonEvent(CardStateManager cardStateManager)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void EnterState(CardStateManager cardStateManager)
     {
-        
+        Debug.Log(cardStateManager.cardCurrentState);
+        cardStateManager.AddPickedStateEvent();
+
+
     }
+
+  
 }

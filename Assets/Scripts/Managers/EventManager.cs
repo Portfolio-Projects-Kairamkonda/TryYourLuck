@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EventManager 
 {
-    public delegate void SelectedCardData(string cardData);
-    public static event SelectedCardData onSelectedCardData;
+    public delegate void OnSelectedCardData(string cardData);
+    public static event OnSelectedCardData onSelectedCardData;
 
     public delegate void OnSelectedCardEffects();
     public static event OnSelectedCardEffects onSelectedCardEffects;
@@ -17,5 +17,23 @@ public class EventManager
 
         if (onSelectedCardEffects != null)
             onSelectedCardEffects();
+    }
+
+    public delegate void OnPickedState();
+    public static event OnPickedState onPickedState;
+
+    public static void InvokeOnPickedState()
+    {
+        if (onPickedState != null)
+            onPickedState();
+    }
+
+    public delegate void OnVerifiedState();
+    public static event OnVerifiedState onVerifiedState;
+
+    public static void InvokeVerifiedState()
+    {
+        if (onVerifiedState != null)
+            onVerifiedState();
     }
 }
