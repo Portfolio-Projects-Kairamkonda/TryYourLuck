@@ -16,16 +16,6 @@ public class CardManager : MonoBehaviour
 
     private ILogger debug;
 
-    private void OnEnable()
-    {
-        EventManager.onSelectedCardData += SelectedCardUpdate;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.onSelectedCardData -= SelectedCardUpdate;    
-    }
-
     private void Awake()
     {
         debug = new NoLogging();
@@ -38,6 +28,9 @@ public class CardManager : MonoBehaviour
 
 
     #region Class methods
+
+   
+
     /// <summary>
     /// 
     /// </summary>

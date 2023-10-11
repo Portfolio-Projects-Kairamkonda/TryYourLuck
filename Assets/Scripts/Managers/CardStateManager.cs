@@ -36,6 +36,18 @@ public class CardStateManager : MonoBehaviour
         mainButton.onClick.AddListener(() => UpdateButtonData(cardCurrentState));
     }
 
+    private void OnEnable()
+    {
+        EventManager.onRestartGame += RestartGame;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.onRestartGame -= RestartGame;    
+    }
+
+    #region Add & Sub methods events
+
     public void AddPickedStateEvent()
     {
         EventManager.onPickedState += ChangetoShuffleState;
@@ -54,7 +66,8 @@ public class CardStateManager : MonoBehaviour
     {
         EventManager.onVerifiedState -= VerifyGuessData;
     }
-   
+
+    #endregion
 
     #region Common methods
     // Switch State 
@@ -69,6 +82,11 @@ public class CardStateManager : MonoBehaviour
     {
         cardCurrentState = state;
         cardCurrentState.ButtonEvent(this);
+    }
+
+    private void RestartGame()
+    {
+        SwitchState(idleState);
     }
     #endregion
 

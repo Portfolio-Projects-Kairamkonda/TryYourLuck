@@ -27,7 +27,8 @@ public class CardData : MonoBehaviour
     void ButtonClicked()
     {
         _selectedCardData = _cardText.text;
-        EventManager.InvokeOnPickedState();
+        EventManager.InvokeSelectedCardData(_selectedCardData);
+        
         EventManager.InvokeVerifiedState();
         
         debug.Log($"{_selectedCardData}: Button clicked");

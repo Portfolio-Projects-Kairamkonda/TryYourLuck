@@ -6,7 +6,7 @@ public class RevealState : CardBaseState
 {
     public override void ButtonEvent(CardStateManager cardStateManager)
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void EnterState(CardStateManager cardStateManager)
