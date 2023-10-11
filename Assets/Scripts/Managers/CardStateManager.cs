@@ -6,16 +6,18 @@ using TMPro;
 
 public class CardStateManager : MonoBehaviour
 {
-    public CardBaseState cardCurrentState;
-
     public Button[] _getButtons;
+    private TextMeshProUGUI[] _getButtonsText;
 
-    public Button mainButton;
-    private string mainButtonText;
+    public Button _mainButton;
+    private TextMeshProUGUI _mainButtonText;
 
-    private List<char> _cardNumbers = new List<char>{'K','Q','J','A'};
-
+    private List<char> _cardNumbers;
     private const char blankCardChar = '*';
+
+    private ILogger debug;
+
+    public CardBaseState currentState;
 
     public IdleState idleState = new IdleState();
     public RevealState revealState = new RevealState();
@@ -23,79 +25,113 @@ public class CardStateManager : MonoBehaviour
     public ShuffleState shuffleState = new ShuffleState();
     public GuessState guessState = new GuessState();
 
+    #region Unity methods
+
     private void Awake()
     {
-        mainButtonText = mainButton.GetComponentInChildren<TextMeshProUGUI>().text;
+        debug = new Logger();
+        _cardNumbers = new List<char>();
+        currentState = idleState;
+
+        _getButtonsText = new TextMeshProUGUI[_getButtons.Length];
+        for (int i = 0; i < _getButtons.Length; i++)
+        {
+            _getButtonsText[i]=_getButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+        }
+
+        _mainButtonText=_mainButton.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void Start()
     {
-        cardCurrentState = idleState;
-        cardCurrentState.EnterState(this);
+        currentState.OnStart(this);
 
-        mainButton.onClick.AddListener(() => UpdateButtonData(cardCurrentState));
+        _mainButton.onClick.AddListener(() => ButtonEvent(currentState));
     }
 
-    private void OnEnable()
+    #endregion
+
+    #region Logic: idle state
+
+    /// <summary>
+    /// Default card numbers
+    /// </summary>
+    public void DefaultCardData()
     {
-        EventManager.onRestartGame += RestartGame;
+        _cardNumbers.Clear();
+
+        _cardNumbers.Add('K');
+        _cardNumbers.Add('Q');
+        _cardNumbers.Add('J');
+        _cardNumbers.Add('A');
+
+        debug.Log($"Default card numbers count is {_cardNumbers.Count}");
     }
 
-    private void OnDisable()
+    /// <summary>
+    /// Blank card with stars
+    /// </summary>
+    public void BlankCards()
     {
-        EventManager.onRestartGame -= RestartGame;    
+        foreach (var buttonText in _getButtonsText)
+            buttonText.text = blankCardChar.ToString();
+
+        _mainButtonText.text = "Reveal";
     }
 
-    #region Add & Sub methods events
+    #endregion
 
-    public void AddPickedStateEvent()
-    {
-        EventManager.onPickedState += ChangetoShuffleState;
-    }
+    #region Logic: Reveal State
 
-    public void SubPickStateEvent()
+    // Reveal Numbers on the cards
+    public void RevealCards(bool buttonActiveState)
     {
-        EventManager.onPickedState -= ChangetoShuffleState;
-    }
+        for (int i = 0; i < _cardNumbers.Count; i++)
+        {
+            _getButtonsText[i].text = _cardNumbers[i].ToString();
+        }
 
-    public void AddVerifyStateEvent()
-    {
-        EventManager.onVerifiedState += VerifyGuessData;
-    }
-    public void SubVerifyStateEvent()
-    {
-        EventManager.onVerifiedState -= VerifyGuessData;
+       
+        _mainButtonText.text = "Pick";
     }
 
     #endregion
 
     #region Common methods
+
     // Switch State 
     public void SwitchState(CardBaseState state)
     {
-        cardCurrentState = state;
-        cardCurrentState.EnterState(this);
+        currentState = state;
+        currentState.OnStart(this);
     }
 
     // Update the button Event 
-    public void UpdateButtonData(CardBaseState state)
+    public void ButtonEvent(CardBaseState state)
     {
-        cardCurrentState = state;
-        cardCurrentState.ButtonEvent(this);
+        currentState = state;
+        currentState.OnButtonEvent(this);
+    }
+
+    public void ButtonsInteractivity(bool status)
+    {
+        for (int i = 0; i < _getButtons.Length; i++)
+            _getButtons[i].interactable = status;
+    }
+
+    public void MainButtonInteractivity(bool status)
+    {
+        _mainButton.interactable = status;
     }
 
     private void RestartGame()
     {
         SwitchState(idleState);
     }
+
     #endregion
 
     #region Logic methods
-
-    private void VerifyGuessData()
-    {
-        RevealCards();
-    }
 
 
     // Shuffle state logic
@@ -103,8 +139,8 @@ public class CardStateManager : MonoBehaviour
     {
         SwitchState(shuffleState);
         //EventManager.onPickedState -= ChangetoShuffleState;
-        mainButton.interactable = false;
-        mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Shuffle";
+        _mainButton.interactable = false;
+        _mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Shuffle";
 
         foreach (var button in _getButtons)
         {
@@ -117,8 +153,8 @@ public class CardStateManager : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         SwitchState(guessState);
-        mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Guess";
-        mainButton.interactable = false;
+        _mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Guess";
+        _mainButton.interactable = false;
         foreach (var button in _getButtons)
         {
             button.interactable = true;
@@ -136,26 +172,9 @@ public class CardStateManager : MonoBehaviour
         StartCoroutine(ShuffleDelay());
     }
 
-    // Blank Cards
-    public void BlankCards()
-    {
-        foreach (var button in _getButtons)
-        {
-            button.GetComponentInChildren<TextMeshProUGUI>().text = blankCardChar.ToString();
-        }
-    }
 
-    // Reveal Numbers on the cards
-    public void RevealCards()
-    {
-        for (int i = 0; i < _cardNumbers.Count; i++)
-        {
-            _getButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = _cardNumbers[i].ToString();
-        }
 
-        mainButton.interactable = false;
-        mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Pick";
-    }
+  
     #endregion
 
     #region Randomize methods
@@ -179,5 +198,6 @@ public class CardStateManager : MonoBehaviour
     }
 
     #endregion
+
 
 }

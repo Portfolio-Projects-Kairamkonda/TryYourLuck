@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class GuessState : CardBaseState
 {
-    public override void ButtonEvent(CardStateManager cardStateManager)
+    public override void OnStart(CardStateManager cardStateManager)
+    {
+        Debug.Log(cardStateManager.currentState);
+    }
+
+    public override void OnButtonEvent(CardStateManager cardStateManager)
     {
         
     }
 
-    public override void EnterState(CardStateManager cardStateManager)
-    {
-        Debug.Log(cardStateManager.cardCurrentState);
-        cardStateManager.AddVerifyStateEvent();
-    }
 }

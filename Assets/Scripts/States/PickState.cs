@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class PickState : CardBaseState
 {
-    public override void ButtonEvent(CardStateManager cardStateManager)
+    public override void OnStart(CardStateManager cardStateManager)
+    {
+        cardStateManager.ButtonsInteractivity(true);
+        cardStateManager.MainButtonInteractivity(false);
+
+        debug.Log(cardStateManager.currentState.ToString());
+    }
+
+    public override void OnButtonEvent(CardStateManager cardStateManager)
     {
         
     }
-
-    public override void EnterState(CardStateManager cardStateManager)
-    {
-        Debug.Log(cardStateManager.cardCurrentState);
-        cardStateManager.AddPickedStateEvent();
-
-
-    }
-
   
 }

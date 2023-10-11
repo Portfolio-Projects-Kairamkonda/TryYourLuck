@@ -17,15 +17,6 @@ public class SoundManager : MonoBehaviour
 
     }
 
-    private void OnEnable()
-    {
-        EventManager.onSelectedCardEffects += PlaySelectedCardAudio;    
-    }
-
-    private void OnDisable()
-    {
-        EventManager.onSelectedCardEffects -= PlaySelectedCardAudio;
-    }
 
     private void Start()
     {

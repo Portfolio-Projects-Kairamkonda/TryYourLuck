@@ -29,8 +29,6 @@ public class CardData : MonoBehaviour
         _selectedCardData = _cardText.text;
         EventManager.InvokeSelectedCardData(_selectedCardData);
         
-        EventManager.InvokeVerifiedState();
-        
         debug.Log($"{_selectedCardData}: Button clicked");
     }
 }

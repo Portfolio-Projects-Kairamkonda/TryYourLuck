@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class ShuffleState : CardBaseState
 {
-    public override void ButtonEvent(CardStateManager cardStateManager)
+    public override void OnStart(CardStateManager cardStateManager)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public override void EnterState(CardStateManager cardStateManager)
-    {
-        Debug.Log(cardStateManager.cardCurrentState);
-        cardStateManager.SubPickStateEvent();
+        Debug.Log(cardStateManager.currentState);
         cardStateManager.ShuffleCardNumbers();
         cardStateManager.BlankCards();
         cardStateManager.ChangeToGuessState();
-        
+    }
+
+    public override void OnButtonEvent(CardStateManager cardStateManager)
+    {
+      
     }
 }

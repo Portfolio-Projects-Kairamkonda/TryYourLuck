@@ -5,11 +5,16 @@ using UnityEngine.UI;
 
 public abstract class CardBaseState 
 {
-    public string message;
+    public ILogger debug;
 
-    public abstract void EnterState(CardStateManager cardStateManager);
+    public CardBaseState()
+    {
+        debug = new Logger();
+    }
 
-    public abstract void ButtonEvent(CardStateManager cardStateManager);
+    public abstract void OnStart(CardStateManager cardStateManager);
+
+    public abstract void OnButtonEvent(CardStateManager cardStateManager);
 }
 
 
