@@ -12,9 +12,12 @@ public abstract class CardBaseState
         debug = new Logger();
     }
 
+    //public abstract void OnEnable(CardManager cardManager);
+
     public abstract void OnStart(CardStateManager cardStateManager);
 
     public abstract void OnButtonEvent(CardStateManager cardStateManager);
+
 }
 
 

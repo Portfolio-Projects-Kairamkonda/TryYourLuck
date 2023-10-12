@@ -8,7 +8,7 @@ public class CardData : MonoBehaviour
 {
     private Button _cardButton;
     private TextMeshProUGUI _cardText;
-    private string _selectedCardData;
+    private string _pickedCardData;
 
     private ILogger debug;
 
@@ -26,9 +26,9 @@ public class CardData : MonoBehaviour
 
     void ButtonClicked()
     {
-        _selectedCardData = _cardText.text;
-        EventManager.InvokeSelectedCardData(_selectedCardData);
+        _pickedCardData = _cardText.text;
+        EventManager.InvokeOnCardSelected(_pickedCardData);
         
-        debug.Log($"{_selectedCardData}: Button clicked");
+        debug.Log($"{_pickedCardData}: Button clicked");
     }
 }

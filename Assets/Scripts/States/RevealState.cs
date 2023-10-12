@@ -10,9 +10,10 @@ public class RevealState : CardBaseState
         cardStateManager.ButtonsInteractivity(false);
         cardStateManager.MainButtonInteractivity(true);
 
+        debug.Log(cardStateManager.currentState.ToString());
+
         cardStateManager.SwitchState(cardStateManager.pickState);
 
-        debug.Log(cardStateManager.currentState.ToString());
     }
 
     public override void OnButtonEvent(CardStateManager cardStateManager)

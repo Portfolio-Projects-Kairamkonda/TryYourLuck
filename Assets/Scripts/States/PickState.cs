@@ -9,6 +9,8 @@ public class PickState : CardBaseState
         cardStateManager.ButtonsInteractivity(true);
         cardStateManager.MainButtonInteractivity(false);
 
+        cardStateManager.AddTriggerShuffleStatEvent();
+
         debug.Log(cardStateManager.currentState.ToString());
     }
 
@@ -16,5 +18,6 @@ public class PickState : CardBaseState
     {
         
     }
-  
+
+    
 }

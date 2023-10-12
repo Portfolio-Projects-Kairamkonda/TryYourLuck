@@ -27,6 +27,16 @@ public class CardStateManager : MonoBehaviour
 
     #region Unity methods
 
+    private void OnEnable()
+    {
+        EventManager.onRestartGame += RestartGame;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.onRestartGame -= RestartGame;
+    }
+
     private void Awake()
     {
         debug = new Logger();
@@ -48,6 +58,7 @@ public class CardStateManager : MonoBehaviour
 
         _mainButton.onClick.AddListener(() => ButtonEvent(currentState));
     }
+    
 
     #endregion
 
@@ -87,14 +98,57 @@ public class CardStateManager : MonoBehaviour
     public void RevealCards(bool buttonActiveState)
     {
         for (int i = 0; i < _cardNumbers.Count; i++)
-        {
             _getButtonsText[i].text = _cardNumbers[i].ToString();
-        }
 
-       
         _mainButtonText.text = "Pick";
     }
 
+    #endregion
+
+    #region Shuffle State
+
+    public void AddTriggerShuffleStatEvent()
+    {
+        EventManager.onCardSelected += TriggerShuffleState;
+    }
+
+    public void SubTriggerShuffleStatEvent()
+    {
+        EventManager.onCardSelected -= TriggerShuffleState;
+    }
+
+    public void TriggerShuffleState()
+    {
+        SwitchState(shuffleState);
+        _mainButtonText.text = "Shuffle";
+    }
+
+    // Shuffle Delay
+    public IEnumerator ShuffleDelay()
+    {
+        yield return new WaitForSeconds(5f);
+        SwitchState(guessState);
+        _mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Guess";
+        _mainButton.interactable = false;
+        foreach (var button in _getButtons)
+        {
+            button.interactable = true;
+        }
+
+        SubTriggerShuffleStatEvent();
+    }
+
+    public void ShuffleCardNumbers()
+    {
+        _cardNumbers = ShuffleCharacters(_cardNumbers);
+    }
+
+    // Guess State
+    public void ChangeToGuessState()
+    {
+       
+        StartCoroutine(ShuffleDelay());
+    }
     #endregion
 
     #region Common methods
@@ -129,52 +183,6 @@ public class CardStateManager : MonoBehaviour
         SwitchState(idleState);
     }
 
-    #endregion
-
-    #region Logic methods
-
-
-    // Shuffle state logic
-    private void ChangetoShuffleState()
-    {
-        SwitchState(shuffleState);
-        //EventManager.onPickedState -= ChangetoShuffleState;
-        _mainButton.interactable = false;
-        _mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Shuffle";
-
-        foreach (var button in _getButtons)
-        {
-            button.interactable = false;
-        }
-    }
-
-    // Shuffle Delay
-    public IEnumerator ShuffleDelay()
-    {
-        yield return new WaitForSeconds(5f);
-        SwitchState(guessState);
-        _mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Guess";
-        _mainButton.interactable = false;
-        foreach (var button in _getButtons)
-        {
-            button.interactable = true;
-        }
-    }
-
-    public void ShuffleCardNumbers()
-    {
-        _cardNumbers = ShuffleCharacters(_cardNumbers);
-    }
-
-    // Guess State
-    public void ChangeToGuessState()
-    {
-        StartCoroutine(ShuffleDelay());
-    }
-
-
-
-  
     #endregion
 
     #region Randomize methods

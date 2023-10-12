@@ -9,6 +9,7 @@ public class IdleState : CardBaseState
         cardStateManager.BlankCards();
         cardStateManager.DefaultCardData();
         cardStateManager.ButtonsInteractivity(false);
+        cardStateManager.MainButtonInteractivity(true);
 
 
         debug.Log(cardStateManager.currentState.ToString());

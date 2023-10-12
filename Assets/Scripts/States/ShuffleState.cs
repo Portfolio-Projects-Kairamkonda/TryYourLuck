@@ -6,10 +6,16 @@ public class ShuffleState : CardBaseState
 {
     public override void OnStart(CardStateManager cardStateManager)
     {
-        Debug.Log(cardStateManager.currentState);
-        cardStateManager.ShuffleCardNumbers();
+        cardStateManager.MainButtonInteractivity(false);
+        cardStateManager.ButtonsInteractivity(false);
+
         cardStateManager.BlankCards();
+        cardStateManager.ShuffleCardNumbers();
+
+        // Wait period for shuffle
         cardStateManager.ChangeToGuessState();
+
+        debug.Log(cardStateManager.currentState.ToString());
     }
 
     public override void OnButtonEvent(CardStateManager cardStateManager)
