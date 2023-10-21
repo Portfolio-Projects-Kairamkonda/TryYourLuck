@@ -8,6 +8,9 @@ public class SoundManager : MonoBehaviour
     private AudioSource audioSource;
     [SerializeField]
     private AudioClip _selectedAudioClip;
+    [SerializeField]
+
+    private AudioClip _guessConfirmationClip;
 
     private ILogger debug;
 
@@ -17,6 +20,17 @@ public class SoundManager : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        EventManager.onCardSelected += PlaySelectedCardAudio;
+        EventManager.onRestartGame += GuessCardAudio;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.onCardSelected -= PlaySelectedCardAudio;
+        EventManager.onRestartGame -= GuessCardAudio;
+    }
 
     private void Start()
     {
@@ -27,10 +41,16 @@ public class SoundManager : MonoBehaviour
     private void PlaySelectedCardAudio()
     {
         debug.Log("Played selected card audio");
-        /* Uncomment after adding audio clip
+        // Uncomment after adding audio clip
         audioSource.clip = _selectedAudioClip;
         audioSource.Play();
-        */
+    }
+    private void GuessCardAudio()
+    {
+        debug.Log("Guessed selected card audio");
+        // Uncomment after adding audio clip
+        audioSource.clip = _guessConfirmationClip;
+        audioSource.Play();
     }
 
     private void AudioSettings()

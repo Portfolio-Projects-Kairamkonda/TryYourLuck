@@ -19,6 +19,11 @@ public class CardStateManager : MonoBehaviour
 
     public CardBaseState currentState;
 
+    private AudioSource _audio;
+
+    public AudioClip _shuffleAudio;
+    public AudioClip _closeAudio;
+
     public IdleState idleState = new IdleState();
     public RevealState revealState = new RevealState();
     public PickState pickState = new PickState();
@@ -44,7 +49,9 @@ public class CardStateManager : MonoBehaviour
         _cardNumbers = new List<char>();
         currentState = idleState;
 
+        _audio = this.GetComponent<AudioSource>();
         _getButtonsText = new TextMeshProUGUI[_getButtons.Length];
+
         for (int i = 0; i < _getButtons.Length; i++)
         {
             _getButtonsText[i]=_getButtons[i].GetComponentInChildren<TextMeshProUGUI>();
@@ -135,9 +142,11 @@ public class CardStateManager : MonoBehaviour
     // Shuffle Delay
     public IEnumerator ShuffleDelay()
     {
-        yield return new WaitForSeconds(5f);
+        PlayStateAudio(_shuffleAudio,true);
+        yield return new WaitForSeconds(2f);
 
         SwitchState(guessState);
+        PlayStateAudio(null, false);
 
         SubTriggerShuffleStatEvent();
     }
@@ -155,6 +164,14 @@ public class CardStateManager : MonoBehaviour
     #endregion
 
     #region Common methods
+
+    // Play Audio
+    public void PlayStateAudio(AudioClip clip, bool loop)
+    {
+        _audio.clip = clip;
+        _audio.loop = loop;
+        _audio.Play();
+    }
 
     // Switch State 
     public void SwitchState(CardBaseState state)
@@ -195,6 +212,7 @@ public class CardStateManager : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         SwitchState(state);
+        PlayStateAudio(_closeAudio,false);
     }
 
 
