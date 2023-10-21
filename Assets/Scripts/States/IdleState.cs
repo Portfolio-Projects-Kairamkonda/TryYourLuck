@@ -6,7 +6,8 @@ public class IdleState : CardBaseState
 {
     public override void OnStart(CardStateManager cardStateManager)
     {
-        cardStateManager.BlankCards();
+        cardStateManager._mainButtonText.text = "Reveal";
+        cardStateManager.BlankCardsText();
         cardStateManager.DefaultCardData();
         cardStateManager.ButtonsInteractivity(false);
         cardStateManager.MainButtonInteractivity(true);

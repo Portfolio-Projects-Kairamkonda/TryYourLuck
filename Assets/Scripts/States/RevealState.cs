@@ -6,7 +6,9 @@ public class RevealState : CardBaseState
 {
     public override void OnStart(CardStateManager cardStateManager)
     {
-        cardStateManager.RevealCards(true);
+        cardStateManager._mainButtonText.text = "Reveal";
+        cardStateManager.RevealCards();
+        cardStateManager.RevealCardsText();
         cardStateManager.ButtonsInteractivity(false);
         cardStateManager.MainButtonInteractivity(true);
 

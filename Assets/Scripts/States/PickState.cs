@@ -6,6 +6,7 @@ public class PickState : CardBaseState
 {
     public override void OnStart(CardStateManager cardStateManager)
     {
+        cardStateManager._mainButtonText.text = "Pick";
         cardStateManager.ButtonsInteractivity(true);
         cardStateManager.MainButtonInteractivity(false);
 

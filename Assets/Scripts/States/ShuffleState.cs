@@ -9,7 +9,7 @@ public class ShuffleState : CardBaseState
         cardStateManager.MainButtonInteractivity(false);
         cardStateManager.ButtonsInteractivity(false);
 
-        cardStateManager.BlankCards();
+        cardStateManager.BlankCardsText();
         cardStateManager.ShuffleCardNumbers();
 
         // Wait period for shuffle
@@ -23,3 +23,4 @@ public class ShuffleState : CardBaseState
       
     }
 }
+ 

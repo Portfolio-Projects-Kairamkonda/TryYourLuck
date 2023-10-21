@@ -10,7 +10,7 @@ public class CardStateManager : MonoBehaviour
     private TextMeshProUGUI[] _getButtonsText;
 
     public Button _mainButton;
-    private TextMeshProUGUI _mainButtonText;
+    public TextMeshProUGUI _mainButtonText;
 
     private List<char> _cardNumbers;
     private const char blankCardChar = '*';
@@ -24,6 +24,7 @@ public class CardStateManager : MonoBehaviour
     public PickState pickState = new PickState();
     public ShuffleState shuffleState = new ShuffleState();
     public GuessState guessState = new GuessState();
+    public CelebrationState celebrationState = new CelebrationState();
 
     #region Unity methods
 
@@ -82,25 +83,33 @@ public class CardStateManager : MonoBehaviour
     /// <summary>
     /// Blank card with stars
     /// </summary>
-    public void BlankCards()
+    public void BlankCardsText()
     {
         foreach (var buttonText in _getButtonsText)
-            buttonText.text = blankCardChar.ToString();
-
-        _mainButtonText.text = "Reveal";
+            buttonText.gameObject.SetActive(false);
+            //buttonText.text= blankCardChar.ToString();
     }
 
+    /// <summary>
+    /// Blank card with stars
+    /// </summary>
+    public void RevealCardsText()
+    {
+        foreach (var buttonText in _getButtonsText)
+            buttonText.gameObject.SetActive(true);
+        //buttonText.text= blankCardChar.ToString();
+
+    }
     #endregion
 
     #region Logic: Reveal State
 
     // Reveal Numbers on the cards
-    public void RevealCards(bool buttonActiveState)
+    public void RevealCards()
     {
         for (int i = 0; i < _cardNumbers.Count; i++)
             _getButtonsText[i].text = _cardNumbers[i].ToString();
 
-        _mainButtonText.text = "Pick";
     }
 
     #endregion
@@ -127,13 +136,8 @@ public class CardStateManager : MonoBehaviour
     public IEnumerator ShuffleDelay()
     {
         yield return new WaitForSeconds(5f);
+
         SwitchState(guessState);
-        _mainButton.GetComponentInChildren<TextMeshProUGUI>().text = "Guess";
-        _mainButton.interactable = false;
-        foreach (var button in _getButtons)
-        {
-            button.interactable = true;
-        }
 
         SubTriggerShuffleStatEvent();
     }
@@ -146,7 +150,6 @@ public class CardStateManager : MonoBehaviour
     // Guess State
     public void ChangeToGuessState()
     {
-       
         StartCoroutine(ShuffleDelay());
     }
     #endregion
@@ -180,8 +183,20 @@ public class CardStateManager : MonoBehaviour
 
     private void RestartGame()
     {
-        SwitchState(idleState);
+        SwitchState(celebrationState);
     }
+
+    public void StartDelayingState(CardBaseState  state, float time)
+    {
+        StartCoroutine(DelayState(state, time));
+    }
+
+    public IEnumerator DelayState(CardBaseState state, float time)
+    {
+        yield return new WaitForSeconds(time);
+        SwitchState(state);
+    }
+
 
     #endregion
 
