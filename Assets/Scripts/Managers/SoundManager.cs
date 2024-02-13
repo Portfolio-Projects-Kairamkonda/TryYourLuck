@@ -9,8 +9,11 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private AudioClip _selectedAudioClip;
     [SerializeField]
-
     private AudioClip _guessConfirmationClip;
+    [SerializeField]
+    private AudioClip _mainButtonClip;
+
+
 
     private ILogger debug;
 
@@ -53,6 +56,12 @@ public class SoundManager : MonoBehaviour
         audioSource.Play();
     }
 
+
+    public void PlayMainButtonAudio()
+    {
+        audioSource.clip = _mainButtonClip;
+        audioSource.Play();
+    }
     private void AudioSettings()
     {
         audioSource.loop = false;

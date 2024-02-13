@@ -18,7 +18,10 @@ public class EventManager
     public static void InvokeOnCardSelected(string pickedCard)
     {
         if (onCardSelected != null)
+        {
             onCardSelected();
+
+        }
 
         if (newCardValue == null)
         {
